@@ -131,6 +131,7 @@ namespace NMEA.Wpf
 
             // 注册导航
             containerRegistry.RegisterForNavigation<IndexView, IndexViewModel>();
+            containerRegistry.RegisterForNavigation<NmeaView, NmeaViewModel>();
             containerRegistry.RegisterForNavigation<SettingsView, SettingsViewModel>();
         }
     }

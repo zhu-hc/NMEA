@@ -62,6 +62,7 @@ namespace NMEA.Wpf.ViewModels
             SkinExtensions.ChangePrimaryHue(settingsService.Settings.Skin.PrimaryHue);
 
             Menus.Add(new MenuBar { Icon = "\ue65e", Name = "首页", Navigation = "IndexView" });
+            Menus.Add(new MenuBar { Icon = "\ue60c", Name = "NMEA", Navigation = "NmeaView" });
             Menus.Add(new MenuBar { Icon = "\ue634", Name = "设置", Navigation = "SettingsView" });
 
             // 默认主页
