@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Remove="Fonts\Alibaba-PuHuiTi-Regular.ttf" />
+    <None Remove="Fonts\iconfont.ttf" />
+    <None Remove="Images\user.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="12.0.1" />
+    <PackageReference Include="MaterialDesignColors" Version="2.1.2" />
+    <PackageReference Include="MaterialDesignThemes" Version="4.8.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="Prism.DryIoc" Version="8.1.97" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Fonts\Alibaba-PuHuiTi-Regular.ttf" />
+    <Resource Include="Fonts\iconfont.ttf" />
+    <Resource Include="Images\user.jpg" />
+  </ItemGroup>
+</Project>
