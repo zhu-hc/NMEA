@@ -5,12 +5,15 @@ using System.Linq;
 using System.Runtime;
 using System.Text;
 using System.Timers;
+using System.Windows;
 using DryIoc;
 using Newtonsoft.Json;
 using NMEA.Wpf.Common.Helpers;
 using NMEA.Wpf.Common.Navigation;
+using NMEA.Wpf.Services;
 using NmeaParser;
 using NmeaParser.Messages;
+using NmeaParser.Messages.Garmin;
 using Prism.Commands;
 using Prism.Ioc;
 
@@ -19,6 +22,7 @@ namespace NMEA.Wpf.ViewModels
     public class NmeaViewModel : GeneralBase
     {
         private Timer timer = new Timer();
+        public IGlobalService Global { get; set; }
 
         private NmeaHelper helper;
         public NmeaHelper Helper
@@ -41,23 +45,30 @@ namespace NMEA.Wpf.ViewModels
             set { SetProperty(ref btnOpenText, value); }
         }
 
-        private String nmea;
-        public String NMEA
-        {
-            get { return nmea; }
-            set { SetProperty(ref nmea, value); }
-        }
-
         public DelegateCommand OpenCommand { get; private set; }
         public NmeaViewModel(IContainerProvider provider) : base(provider)
         {
+            Global = provider.Resolve<IGlobalService>();
+
             IsEnable = true;
             BtnOpenText = "打开";
 
             Helper = new NmeaHelper((s, e) => {
-                if (e.Message is NmeaMessage nmea)
+                if (e.Message is Rmc rmc)
+                    Global.NMEA.Rmc = rmc;
+                else if (e.Message is Gga gga)
+                    Global.NMEA.Gga = gga;
+                else if (e.Message is Gsa gsa)
+                    Global.NMEA.Gsa = gsa;
+                else if (e.Message is Gll gll)
+                    Global.NMEA.Gll = gll;
+                else if (e.Message is Pgrme pgrme)
+                    Global.NMEA.Pgrme = pgrme;
+                else if (e.Message is Vtg vtg)
+                    Global.NMEA.Vtg = vtg;
+                else
                 {
-                    NMEA = DateTime.Now.ToString() + "\r\n" + JsonConvert.SerializeObject(nmea, Formatting.Indented);
+                    // Message(e.Message.ToString());
                 }
             });
 

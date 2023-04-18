@@ -125,7 +125,8 @@ namespace NMEA.Wpf
 
             // 注册服务
             containerRegistry.RegisterSingleton<IDialogHostService, DialogHostService>();
-
+            containerRegistry.RegisterSingleton<IGlobalService, GlobalService>();
+            
             // 注册弹窗
             containerRegistry.RegisterForNavigation<MessageView, MessageViewModel>();
 

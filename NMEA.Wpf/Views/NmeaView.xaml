@@ -8,9 +8,14 @@
              xmlns:helpers="clr-namespace:NMEA.Wpf.Common.Helpers"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:Behaviors="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:controls="clr-namespace:NMEA.Wpf.Controls"
+             xmlns:converter="clr-namespace:NMEA.Wpf.Common.Converters"
              mc:Ignorable="d"
              d:DesignHeight="450"
              d:DesignWidth="800">
+    <UserControl.Resources>
+        <converter:NullToCollapsedConverter x:Key="nullConv" />
+    </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -38,19 +43,36 @@
                     Content="{Binding BtnOpenText}"
                     Width="200" />
         </StackPanel>
-        <avalonEdit:TextEditor Grid.Row="1"
-                               Margin="10"
-                               Foreground="{DynamicResource MaterialDesignBody}"
-                               Background="{DynamicResource MaterialDesignPaper}"
-                               HorizontalScrollBarVisibility="Disabled"
-                               VerticalScrollBarVisibility="Auto"
-                               xmlns:avalonEdit="http://icsharpcode.net/sharpdevelop/avalonedit"
-                               FontSize="16"
-                               IsReadOnly="True"
-                               SyntaxHighlighting="Json">
-            <Behaviors:Interaction.Behaviors>
-                <helpers:AvalonEditHelper BindText="{Binding NMEA, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-            </Behaviors:Interaction.Behaviors>
-        </avalonEdit:TextEditor>
+
+        <ScrollViewer Grid.Row="1"
+                      HorizontalScrollBarVisibility="Disabled">
+            <WrapPanel x:Name="MessagePanel"
+                       Margin="10 0">
+                <controls:RmcControl x:Name="gprmcView"
+                                     Padding="10,10"
+                                     Message="{Binding Global.NMEA.Rmc}"
+                                     Visibility="{Binding Message, ElementName=gprmcView, Converter={StaticResource nullConv}}" />
+                <controls:GgaControl x:Name="gpggaView"
+                                     Message="{Binding Global.NMEA.Gga}"
+                                     Padding="10,10"
+                                     Visibility="{Binding Message, ElementName=gpggaView, Converter={StaticResource nullConv}}" />
+                <controls:GsaControl x:Name="gpgsaView"
+                                     Message="{Binding Global.NMEA.Gsa}"
+                                     Padding="10,10"
+                                     Visibility="{Binding Message, ElementName=gpgsaView, Converter={StaticResource nullConv}}" />
+                <controls:GllControl x:Name="gpgllView"
+                                     Message="{Binding Global.NMEA.Gll}"
+                                     Padding="10,10"
+                                     Visibility="{Binding Message, ElementName=gpgllView, Converter={StaticResource nullConv}}" />
+                <controls:PgrmeControl x:Name="pgrmeView"
+                                       Message="{Binding Global.NMEA.Pgrme}"
+                                       Padding="10,10"
+                                       Visibility="{Binding Message, ElementName=pgrmeView, Converter={StaticResource nullConv}}" />
+                <controls:VtgControl x:Name="vtgView"
+                                       Message="{Binding Global.NMEA.Vtg}"
+                                       Padding="10,10"
+                                     Visibility="{Binding Message, ElementName=vtgView, Converter={StaticResource nullConv}}" />
+            </WrapPanel>
+        </ScrollViewer>
     </Grid>
 </UserControl>
