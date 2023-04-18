@@ -44,35 +44,78 @@
                     Width="200" />
         </StackPanel>
 
-        <ScrollViewer Grid.Row="1"
-                      HorizontalScrollBarVisibility="Disabled">
-            <WrapPanel x:Name="MessagePanel"
-                       Margin="10 0">
-                <controls:RmcControl x:Name="gprmcView"
-                                     Padding="10,10"
-                                     Message="{Binding Global.NMEA.Rmc}"
-                                     Visibility="{Binding Message, ElementName=gprmcView, Converter={StaticResource nullConv}}" />
-                <controls:GgaControl x:Name="gpggaView"
-                                     Message="{Binding Global.NMEA.Gga}"
-                                     Padding="10,10"
-                                     Visibility="{Binding Message, ElementName=gpggaView, Converter={StaticResource nullConv}}" />
-                <controls:GsaControl x:Name="gpgsaView"
-                                     Message="{Binding Global.NMEA.Gsa}"
-                                     Padding="10,10"
-                                     Visibility="{Binding Message, ElementName=gpgsaView, Converter={StaticResource nullConv}}" />
-                <controls:GllControl x:Name="gpgllView"
-                                     Message="{Binding Global.NMEA.Gll}"
-                                     Padding="10,10"
-                                     Visibility="{Binding Message, ElementName=gpgllView, Converter={StaticResource nullConv}}" />
-                <controls:PgrmeControl x:Name="pgrmeView"
-                                       Message="{Binding Global.NMEA.Pgrme}"
-                                       Padding="10,10"
-                                       Visibility="{Binding Message, ElementName=pgrmeView, Converter={StaticResource nullConv}}" />
-                <controls:VtgControl x:Name="vtgView"
-                                       Message="{Binding Global.NMEA.Vtg}"
-                                       Padding="10,10"
-                                     Visibility="{Binding Message, ElementName=vtgView, Converter={StaticResource nullConv}}" />
-            </WrapPanel>
-        </ScrollViewer>
+        <TabControl Grid.Row="1"
+                    HorizontalContentAlignment="Center"
+                    materialDesign:ColorZoneAssist.Mode="PrimaryLight"
+                    materialDesign:NavigationRailAssist.SelectionCornerRadius="50"
+                    materialDesign:NavigationRailAssist.ShowSelectionBackground="True"
+                    Style="{StaticResource MaterialDesignNavigationRailTabControl}"
+                    TabStripPlacement="Bottom">
+            <TabItem Margin="4">
+                <TabItem.Header>
+                    <StackPanel Width="auto"
+                                Height="auto">
+                        <materialDesign:PackIcon Width="24"
+                                                 Height="24"
+                                                 HorizontalAlignment="Center"
+                                                 Kind="MessageProcessingOutline" />
+                        <TextBlock HorizontalAlignment="Center"
+                                   Text="消息" />
+                    </StackPanel>
+                </TabItem.Header>
+                <ScrollViewer HorizontalScrollBarVisibility="Disabled">
+                    <WrapPanel x:Name="MessagePanel"
+                               Margin="10 0">
+                        <controls:RmcControl x:Name="gprmcView"
+                                             Padding="10,10"
+                                             Message="{Binding Global.NMEA.Rmc}"
+                                             Visibility="{Binding Message, ElementName=gprmcView, Converter={StaticResource nullConv}}" />
+                        <controls:GgaControl x:Name="gpggaView"
+                                             Message="{Binding Global.NMEA.Gga}"
+                                             Padding="10,10"
+                                             Visibility="{Binding Message, ElementName=gpggaView, Converter={StaticResource nullConv}}" />
+                        <controls:GsaControl x:Name="gpgsaView"
+                                             Message="{Binding Global.NMEA.Gsa}"
+                                             Padding="10,10"
+                                             Visibility="{Binding Message, ElementName=gpgsaView, Converter={StaticResource nullConv}}" />
+                        <controls:GllControl x:Name="gpgllView"
+                                             Message="{Binding Global.NMEA.Gll}"
+                                             Padding="10,10"
+                                             Visibility="{Binding Message, ElementName=gpgllView, Converter={StaticResource nullConv}}" />
+                        <controls:PgrmeControl x:Name="pgrmeView"
+                                               Message="{Binding Global.NMEA.Pgrme}"
+                                               Padding="10,10"
+                                               Visibility="{Binding Message, ElementName=pgrmeView, Converter={StaticResource nullConv}}" />
+                        <controls:VtgControl x:Name="vtgView"
+                                             Message="{Binding Global.NMEA.Vtg}"
+                                             Padding="10,10"
+                                             Visibility="{Binding Message, ElementName=vtgView, Converter={StaticResource nullConv}}" />
+                    </WrapPanel>
+                </ScrollViewer>
+            </TabItem>
+            <TabItem>
+                <TabItem.Header>
+                    <StackPanel Width="auto"
+                                Height="auto">
+                        <materialDesign:PackIcon Width="24"
+                                                 Height="24"
+                                                 HorizontalAlignment="Center"
+                                                 Kind="WeatherNight" />
+                        <TextBlock HorizontalAlignment="Center"
+                                   Text="卫星" />
+                    </StackPanel>
+                </TabItem.Header>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <controls:SatelliteView MaxWidth="{Binding ActualHeight, ElementName=satView}"
+                                            x:Name="satView" />
+                    <controls:SatelliteSnr Grid.Row="1"
+                                           x:Name="satSnr" />
+                </Grid>
+            </TabItem>
+        </TabControl>
     </Grid>
 </UserControl>

@@ -54,7 +54,9 @@ namespace NMEA.Wpf.ViewModels
             BtnOpenText = "打开";
 
             Helper = new NmeaHelper((s, e) => {
-                if (e.Message is Rmc rmc)
+                if (e.Message is Gsv gsv)
+                    SetGsv(gsv);
+                else if (e.Message is Rmc rmc)
                     Global.NMEA.Rmc = rmc;
                 else if (e.Message is Gga gga)
                     Global.NMEA.Gga = gga;

@@ -13,6 +13,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using NMEA.Wpf.Extensions;
+using Prism.Events;
 
 namespace NMEA.Wpf.Views
 {
@@ -21,9 +23,15 @@ namespace NMEA.Wpf.Views
     /// </summary>
     public partial class NmeaView : UserControl
     {
-        public NmeaView()
+        public NmeaView(IEventAggregator aggregator)
         {
             InitializeComponent();
+
+            // 注册事件
+            aggregator.Register(arg => {
+                satView.SetGsv(arg.Gsv);
+                satSnr.SetGsv(arg.Gsv);
+            });
         }
 
         private void CbPorts_DropDownOpened(Object sender, EventArgs e)

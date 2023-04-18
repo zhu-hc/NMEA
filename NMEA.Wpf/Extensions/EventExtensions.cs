@@ -49,5 +49,15 @@ namespace NMEA.Wpf.Extensions
         {
             aggregator.GetEvent<LoadingEvent>().Subscribe(action);
         }
+
+        public static void Register(this IEventAggregator aggregator, Action<GsvModel> action)
+        {
+            aggregator.GetEvent<GsvEvent>().Subscribe(action);
+        }
+
+        public static void SetGsv(this IEventAggregator aggregator, GsvModel model)
+        {
+            aggregator.GetEvent<GsvEvent>().Publish(model);
+        }
     }
 }

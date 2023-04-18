@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using NMEA.Wpf.Common.Events;
 using NMEA.Wpf.Extensions;
+using NmeaParser.Messages;
 using Prism.Events;
 using Prism.Ioc;
 using Prism.Mvvm;
@@ -31,6 +32,13 @@ namespace NMEA.Wpf.Common.Navigation
         {
             App.Current.Dispatcher.Invoke(() => {
                 aggregator.UpdateLoading(new LoadingModel { IsOpen = isOpen });
+            });
+        }
+
+        public void SetGsv(Gsv gsv)
+        {
+            App.Current.Dispatcher.Invoke(() => {
+                aggregator.SetGsv(new GsvModel { Gsv = gsv });
             });
         }
     }
