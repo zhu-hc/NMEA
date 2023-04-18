@@ -59,5 +59,15 @@ namespace NMEA.Wpf.Extensions
         {
             aggregator.GetEvent<GsvEvent>().Publish(model);
         }
+
+        public static void Register(this IEventAggregator aggregator, Action<SerialMessageModel> action)
+        {
+            aggregator.GetEvent<SerialMessageEvent>().Subscribe(action);
+        }
+
+        public static void SetSerialMessage(this IEventAggregator aggregator, SerialMessageModel model)
+        {
+            aggregator.GetEvent<SerialMessageEvent>().Publish(model);
+        }
     }
 }

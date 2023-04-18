@@ -14,6 +14,8 @@
 
                 <ResourceDictionary Source="Themes/IconTextBlock.xaml" />
                 <ResourceDictionary Source="Themes/MainMenuListbox.xaml" />
+                <ResourceDictionary Source="Themes/ReadOnlyTextBox.xaml" />
+                <ResourceDictionary Source="Themes/MessagesListBox.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
             <Style TargetType="{x:Type TextElement}">

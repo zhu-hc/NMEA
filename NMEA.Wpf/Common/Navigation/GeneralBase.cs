@@ -34,12 +34,5 @@ namespace NMEA.Wpf.Common.Navigation
                 aggregator.UpdateLoading(new LoadingModel { IsOpen = isOpen });
             });
         }
-
-        public void SetGsv(Gsv gsv)
-        {
-            App.Current.Dispatcher.Invoke(() => {
-                aggregator.SetGsv(new GsvModel { Gsv = gsv });
-            });
-        }
     }
 }

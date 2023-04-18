@@ -8,8 +8,10 @@ using System.Timers;
 using System.Windows;
 using DryIoc;
 using Newtonsoft.Json;
+using NMEA.Wpf.Common.Events;
 using NMEA.Wpf.Common.Helpers;
 using NMEA.Wpf.Common.Navigation;
+using NMEA.Wpf.Extensions;
 using NMEA.Wpf.Services;
 using NmeaParser;
 using NmeaParser.Messages;
@@ -105,6 +107,13 @@ namespace NMEA.Wpf.ViewModels
                 {
                     Message(ex.Message);
                 }
+            });
+        }
+
+        private void SetGsv(Gsv gsv)
+        {
+            App.Current.Dispatcher.Invoke(() => {
+                aggregator.SetGsv(new GsvModel { Gsv = gsv });
             });
         }
     }
