@@ -61,7 +61,7 @@ namespace NMEA.Wpf.ViewModels
         public AtTestSettings AtTest { get; set; }
         public DelegateCommand OpenCommand { get; private set; }
         public DelegateCommand TestCommand { get; private set; }
-        
+
         public IndexViewModel(IContainerProvider provider) : base(provider)
         {
             SerialMessages = new ObservableCollection<SerialMessage>();
@@ -123,15 +123,17 @@ namespace NMEA.Wpf.ViewModels
                 try
                 {
                     Int32 step = 1;
-                    Retry:
+                    Int32? cnt;
+Retry:
                     if (!AtTest.Lists.ContainsKey(step)) throw new Exception($"Key = {step} 数据不存在");
                     var at = AtTest.Lists[step];
+                    cnt = at.Retry;
                     while (true)
                     {
                         if (Helper.CheckCommand(at.Command, at.Return, at.Timeout)) break;
 
-                        if (at.Retry == null || at.Retry <= 0 ) throw new Exception($"{at.Command} 失败");
-                        if (at.Retry != null) at.Retry--;
+                        if (cnt == null || cnt <= 0) throw new Exception($"{at.Command} 失败");
+                        if (cnt != null) cnt--;
                     }
 
                     // 执行完成

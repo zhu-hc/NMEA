@@ -6,6 +6,7 @@ using System.IO.Ports;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using NMEA.Wpf.Models;
 using Prism.Mvvm;
 using Serilog;
@@ -34,6 +35,7 @@ namespace NMEA.Wpf.Common.Helpers
         public event AtMessageEventHandler AtMessage;
 
         private SerialPort serialPort = new SerialPort();
+        private List<Byte> SerialRawData = new List<Byte>();
         private BlockingCollection<String> packetBlockingCollection = new BlockingCollection<String>(1);
 
         private String portName;
@@ -57,6 +59,7 @@ namespace NMEA.Wpf.Common.Helpers
 
         public void Open()
         {
+            serialPort.NewLine = "\r\n";
             serialPort.PortName = PortName;
             serialPort.BaudRate = Convert.ToInt32(BaudRate);
             serialPort.DataBits = 8;
@@ -79,7 +82,8 @@ namespace NMEA.Wpf.Common.Helpers
             {
                 AtMessage(this, new AtMessageEventArgs(TransferDirection.Tx, s));
                 while (packetBlockingCollection.TryTake(out _)) { }
-                serialPort.WriteLine(s);
+                Byte[] bytes = Encoding.Default.GetBytes(s + "\r\n");
+                serialPort.Write(bytes, 0, bytes.Length);
             }
         }
 
@@ -92,30 +96,33 @@ namespace NMEA.Wpf.Common.Helpers
         {
             AtMessage += handler;
 
-            Task.Run(() => {
-                while (true)
-                {
-                    try
-                    {
-                        if (!serialPort.IsOpen) continue;
+            serialPort.DataReceived += DataReceived;
+        }
 
-                        String s = serialPort.ReadLine().Trim(' ', '\r', '\n');
-                        if (s != "")
-                        {
-                            AtMessage(this, new AtMessageEventArgs(TransferDirection.Rx, s));
-                            // Log.Information("AT Rx: " + s);
-                            if (!packetBlockingCollection.TryAdd(s))
-                                Debug.WriteLine("无法在添加包了");
-                            else
-                                Debug.WriteLine("添加包成功");
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine(ex.Message);
-                    }
+        private void DataReceived(object sender, SerialDataReceivedEventArgs e)
+        {
+            SerialPort seria = (SerialPort)sender;
+
+            if (seria.IsOpen == false) return;
+
+            Byte[] rawData = new Byte[seria.BytesToRead];
+            seria.Read(rawData, 0, rawData.Length);
+
+            foreach (byte rbyte in rawData)
+            {
+                SerialRawData.Add(rbyte);
+                if (SerialRawData.Count >= 2 && SerialRawData[^2] == '\r' && SerialRawData[^1] == '\n')
+                {
+                    String s = Encoding.Default.GetString(SerialRawData.ToArray()).Trim(' ', '\r', '\n');
+                    SerialRawData.Clear();
+                    AtMessage(this, new AtMessageEventArgs(TransferDirection.Rx, s));
+                    // Log.Information("AT Rx: " + s);
+                    if (!packetBlockingCollection.TryAdd(s))
+                        Debug.WriteLine("无法在添加包了");
+                    else
+                        Debug.WriteLine("添加包成功");
                 }
-            });
+            }
         }
 
         public Boolean CheckCommand(String tx, String rx, Int32 time)
