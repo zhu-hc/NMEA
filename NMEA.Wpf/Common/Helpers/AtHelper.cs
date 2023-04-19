@@ -115,6 +115,8 @@ namespace NMEA.Wpf.Common.Helpers
                 {
                     String s = Encoding.Default.GetString(SerialRawData.ToArray()).Trim(' ', '\r', '\n');
                     SerialRawData.Clear();
+                    if (s == "") return;
+
                     AtMessage(this, new AtMessageEventArgs(TransferDirection.Rx, s));
                     // Log.Information("AT Rx: " + s);
                     if (!packetBlockingCollection.TryAdd(s))
